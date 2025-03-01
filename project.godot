@@ -11,8 +11,19 @@ config_version=5
 [application]
 
 config/name="godot-dashboard"
+run/main_scene="res://interface.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
+run/low_processor_mode=true
+boot_splash/show_image=false
 config/icon="res://icon.svg"
+
+[display]
+
+window/energy_saving/keep_screen_on=false
+
+[gui]
+
+theme/custom="res://ui_theme.tres"
 
 [rendering]
 

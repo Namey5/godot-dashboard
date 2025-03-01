@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq08c3veblvgs"]
+
+[ext_resource type="Texture2D" uid="uid://2eyrehlue6s2" path="res://icons/PNG/White/1x/open.png" id="1_uwpbt"]
+[ext_resource type="Texture2D" uid="uid://cnesilrmlvjr5" path="res://icons/PNG/White/1x/trashcan.png" id="2_gn1ql"]
+
+[node name="Engine" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 80)
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_uwpbt")
+stretch_mode = 5
+
+[node name="Info" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Version" type="Label" parent="MarginContainer/HBoxContainer/Info"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Godot 4.3.stable.official [a1b2c3d4]"
+text_overrun_behavior = 3
+
+[node name="Path" type="Label" parent="MarginContainer/HBoxContainer/Info"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.61339, 0.61339, 0.61339, 1)
+text = "/home/user/.local/share/godot-dashboard/godot-4.3.stable-linux.x86-64"
+text_overrun_behavior = 3
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+icon = ExtResource("2_gn1ql")
+icon_alignment = 1

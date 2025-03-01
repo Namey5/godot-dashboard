@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dkijllt7qh4ni"]
+
+[ext_resource type="Texture2D" uid="uid://dkoenxyfug1fh" path="res://icons/PNG/White/1x/down.png" id="1_xy2tv"]
+[ext_resource type="Texture2D" uid="uid://cs7v7p2ryp1lp" path="res://icons/PNG/White/1x/up.png" id="2_5ya17"]
+
+[resource]
+BoxContainer/constants/separation = 10
+Foldout/base_type = &"CheckButton"
+Foldout/constants/icon_max_width = 32
+Foldout/icons/checked = ExtResource("1_xy2tv")
+Foldout/icons/unchecked = ExtResource("2_5ya17")
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
