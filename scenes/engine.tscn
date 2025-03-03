@@ -1,10 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://bq08c3veblvgs"]
+[gd_scene load_steps=4 format=3 uid="uid://bq08c3veblvgs"]
 
+[ext_resource type="Script" path="res://scripts/views/engine_view.gd" id="1_hdykv"]
 [ext_resource type="Texture2D" uid="uid://2eyrehlue6s2" path="res://icons/PNG/White/1x/open.png" id="1_uwpbt"]
 [ext_resource type="Texture2D" uid="uid://cnesilrmlvjr5" path="res://icons/PNG/White/1x/trashcan.png" id="2_gn1ql"]
 
-[node name="Engine" type="PanelContainer"]
+[node name="Engine" type="PanelContainer" node_paths=PackedStringArray("main_button", "icon", "version", "path", "delete_button")]
 custom_minimum_size = Vector2(0, 80)
+size_flags_horizontal = 3
+script = ExtResource("1_hdykv")
+main_button = NodePath("Button")
+icon = NodePath("MarginContainer/HBoxContainer/Icon")
+version = NodePath("MarginContainer/HBoxContainer/Info/Version")
+path = NodePath("MarginContainer/HBoxContainer/Info/Path")
+delete_button = NodePath("MarginContainer/HBoxContainer/DeleteButton")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 2

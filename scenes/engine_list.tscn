@@ -1,8 +1,14 @@
 [gd_scene load_steps=2 format=3 uid="uid://c8ipld8xjki0s"]
 
-[ext_resource type="PackedScene" uid="uid://bq08c3veblvgs" path="res://scenes/engine.tscn" id="1_c4610"]
+[ext_resource type="Script" path="res://scripts/views/engine_list_view.gd" id="1_52qjf"]
 
-[node name="EngineList" type="PanelContainer"]
+[node name="EngineList" type="PanelContainer" node_paths=PackedStringArray("header", "list_parent", "no_content_parent", "next_page_button")]
+size_flags_horizontal = 3
+script = ExtResource("1_52qjf")
+header = NodePath("MarginContainer/VBoxContainer/Header")
+list_parent = NodePath("MarginContainer/VBoxContainer/Content/VBoxContainer/EngineList")
+no_content_parent = NodePath("MarginContainer/VBoxContainer/Content/VBoxContainer/NoContentPanel")
+next_page_button = NodePath("MarginContainer/VBoxContainer/Content/VBoxContainer/NextPageButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -24,29 +30,28 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="NoContentPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/Content"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Content"]
+layout_mode = 2
+
+[node name="NoContentPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/Content/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Content/NoContentPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Content/VBoxContainer/NoContentPanel"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Content/NoContentPanel/MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Content/VBoxContainer/NoContentPanel/MarginContainer"]
 layout_mode = 2
 text = "No Content Available."
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="EngineList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Content"]
+[node name="EngineList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Content/VBoxContainer"]
 layout_mode = 2
 
-[node name="Engine" parent="MarginContainer/VBoxContainer/Content/EngineList" instance=ExtResource("1_c4610")]
+[node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/Content/VBoxContainer"]
 layout_mode = 2
-
-[node name="Engine2" parent="MarginContainer/VBoxContainer/Content/EngineList" instance=ExtResource("1_c4610")]
-layout_mode = 2
-
-[node name="Engine3" parent="MarginContainer/VBoxContainer/Content/EngineList" instance=ExtResource("1_c4610")]
-layout_mode = 2
+disabled = true
+text = "Load More..."
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/Header" to="MarginContainer/VBoxContainer/Content" method="set_visible"]

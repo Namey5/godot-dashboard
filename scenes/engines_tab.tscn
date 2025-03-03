@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://5461o8s23g0a"]
+[gd_scene load_steps=4 format=3 uid="uid://5461o8s23g0a"]
 
 [ext_resource type="PackedScene" uid="uid://c8ipld8xjki0s" path="res://scenes/engine_list.tscn" id="1_dnn2p"]
+[ext_resource type="Script" path="res://scripts/controllers/download_controller.gd" id="2_76avd"]
+[ext_resource type="Script" path="res://scripts/models/download_model.gd" id="2_634fe"]
 
 [node name="Engines" type="ScrollContainer"]
 anchors_preset = 15
@@ -11,6 +13,14 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_tab_index = 0
 
+[node name="DownloadController" type="Node" parent="." node_paths=PackedStringArray("model", "view")]
+script = ExtResource("2_76avd")
+model = NodePath("DownloadModel")
+view = NodePath("../MarginContainer/VBoxContainer/AvailableEngines")
+
+[node name="DownloadModel" type="Node" parent="DownloadController"]
+script = ExtResource("2_634fe")
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -18,11 +28,14 @@ size_flags_horizontal = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="EngineList" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_dnn2p")]
+[node name="InstalledEngines" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_dnn2p")]
 layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="EngineList2" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_dnn2p")]
+[node name="AvailableEngines" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_dnn2p")]
 layout_mode = 2
+header_format = "Available [{0}]"
+
+[connection signal="on_page_fetched" from="DownloadController/DownloadModel" to="DownloadController" method="_on_download_model_on_page_fetched"]
