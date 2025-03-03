@@ -38,4 +38,10 @@ layout_mode = 2
 layout_mode = 2
 header_format = "Available [{0}]"
 
+[node name="Label" parent="MarginContainer/VBoxContainer/AvailableEngines/MarginContainer/VBoxContainer/Content/VBoxContainer/NoContentPanel/MarginContainer" index="0"]
+text = "No engines found."
+
 [connection signal="on_page_fetched" from="DownloadController/DownloadModel" to="DownloadController" method="_on_download_model_on_page_fetched"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/AvailableEngines/MarginContainer/VBoxContainer/Content/VBoxContainer/NextPageButton" to="DownloadController" method="_on_next_page_button_pressed"]
+
+[editable path="MarginContainer/VBoxContainer/AvailableEngines"]

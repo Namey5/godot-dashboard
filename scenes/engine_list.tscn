@@ -51,7 +51,6 @@ layout_mode = 2
 
 [node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/Content/VBoxContainer"]
 layout_mode = 2
-disabled = true
 text = "Load More..."
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/Header" to="MarginContainer/VBoxContainer/Content" method="set_visible"]

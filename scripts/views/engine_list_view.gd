@@ -8,7 +8,7 @@ extends PanelContainer
 @export var no_content_parent: Control
 @export var next_page_button: Button
 
-var _items: Array[EngineView] = []
+var _item_views: Array[EngineView] = []
 
 
 func _ready() -> void:
@@ -16,20 +16,24 @@ func _ready() -> void:
 
 
 func clear_items() -> void:
-	for item in _items:
-		item.queue_free()
-	_items.clear()
+	for view in _item_views:
+		view.queue_free()
+	_item_views.clear()
 
 	header.text = header_format.format([0])
 	no_content_parent.visible = true
 
 
-func set_items(items: Array) -> void:
-	clear_items()
-
-	header.text = header_format.format([items.size()])
-	no_content_parent.visible = items.is_empty()
-
+func add_items(items: Array) -> void:
 	for item in items:
 		var view := EngineView.create(item)
 		list_parent.add_child(view)
+		_item_views.append(view)
+
+	header.text = header_format.format([_item_views.size()])
+	no_content_parent.visible = _item_views.is_empty()
+
+
+func set_items(items: Array) -> void:
+	clear_items()
+	add_items(items)
