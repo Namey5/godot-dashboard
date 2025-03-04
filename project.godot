@@ -21,6 +21,11 @@ config/icon="res://icon.svg"
 
 window/energy_saving/keep_screen_on=false
 
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
+
 [gui]
 
 theme/custom="res://ui_theme.tres"
