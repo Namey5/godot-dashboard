@@ -1,7 +1,10 @@
 class_name EngineListView
 extends PanelContainer
 
+signal item_main_button_pressed(item: EngineView)
+signal item_inner_button_pressed(item: EngineView)
 
+@export var engine_scene: PackedScene
 @export var header: CheckButton
 @export var header_format := "Engines [{0}]"
 @export var list_parent: VBoxContainer
@@ -26,7 +29,10 @@ func clear_items() -> void:
 
 func add_items(items: Array) -> void:
 	for item in items:
-		var view := EngineView.create(item)
+		var view := engine_scene.instantiate() as EngineView
+		view.initialise(item)
+		view.main_button.pressed.connect(item_main_button_pressed.emit.bind(view))
+		view.inner_button.pressed.connect(item_inner_button_pressed.emit.bind(view))
 		list_parent.add_child(view)
 		_item_views.append(view)
 

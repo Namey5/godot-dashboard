@@ -4,17 +4,17 @@
 [ext_resource type="Texture2D" uid="uid://2eyrehlue6s2" path="res://icons/PNG/White/1x/open.png" id="1_uwpbt"]
 [ext_resource type="Texture2D" uid="uid://cnesilrmlvjr5" path="res://icons/PNG/White/1x/trashcan.png" id="2_gn1ql"]
 
-[node name="Engine" type="PanelContainer" node_paths=PackedStringArray("main_button", "icon", "version", "path", "delete_button")]
+[node name="Engine" type="PanelContainer" node_paths=PackedStringArray("main_button", "icon", "version", "path", "inner_button")]
 custom_minimum_size = Vector2(0, 80)
 size_flags_horizontal = 3
 script = ExtResource("1_hdykv")
-main_button = NodePath("Button")
+main_button = NodePath("MainButton")
 icon = NodePath("MarginContainer/HBoxContainer/Icon")
 version = NodePath("MarginContainer/HBoxContainer/Info/Version")
 path = NodePath("MarginContainer/HBoxContainer/Info/Path")
-delete_button = NodePath("MarginContainer/HBoxContainer/DeleteButton")
+inner_button = NodePath("MarginContainer/HBoxContainer/InnerButton")
 
-[node name="Button" type="Button" parent="."]
+[node name="MainButton" type="Button" parent="."]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 
@@ -52,7 +52,7 @@ theme_override_colors/font_color = Color(0.61339, 0.61339, 0.61339, 1)
 text = "/home/user/.local/share/godot-dashboard/godot-4.3.stable-linux.x86-64"
 text_overrun_behavior = 3
 
-[node name="DeleteButton" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="InnerButton" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 icon = ExtResource("2_gn1ql")

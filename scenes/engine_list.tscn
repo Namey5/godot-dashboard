@@ -1,10 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8ipld8xjki0s"]
+[gd_scene load_steps=3 format=3 uid="uid://c8ipld8xjki0s"]
 
 [ext_resource type="Script" path="res://scripts/views/engine_list_view.gd" id="1_52qjf"]
+[ext_resource type="PackedScene" uid="uid://bq08c3veblvgs" path="res://scenes/engine.tscn" id="2_1bi2i"]
 
 [node name="EngineList" type="PanelContainer" node_paths=PackedStringArray("header", "list_parent", "no_content_parent", "next_page_button")]
 size_flags_horizontal = 3
 script = ExtResource("1_52qjf")
+engine_scene = ExtResource("2_1bi2i")
 header = NodePath("MarginContainer/VBoxContainer/Header")
 list_parent = NodePath("MarginContainer/VBoxContainer/Content/VBoxContainer/EngineList")
 no_content_parent = NodePath("MarginContainer/VBoxContainer/Content/VBoxContainer/NoContentPanel")
@@ -21,7 +23,7 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_type_variation = &"Foldout"
 button_pressed = true
-text = "Engines [0]: "
+text = "Engines [0]"
 
 [node name="Content" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -50,7 +52,10 @@ text_overrun_behavior = 3
 layout_mode = 2
 
 [node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/Content/VBoxContainer"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
 text = "Load More..."
 
 [connection signal="toggled" from="MarginContainer/VBoxContainer/Header" to="MarginContainer/VBoxContainer/Content" method="set_visible"]
