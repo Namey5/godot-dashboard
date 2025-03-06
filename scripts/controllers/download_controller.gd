@@ -20,16 +20,7 @@ func _on_download_model_page_fetched(success: bool, new_releases: Array) -> void
 	if success:
 		view.add_items(new_releases)
 	else:
-		var popup := AcceptDialog.new()
-		popup.dialog_text = "Failed to fetch new releases."
-		popup.visible = true
-		popup.visibility_changed.connect(
-			func(visible: bool) -> void:
-				if not visible:
-					popup.queue_free()
-		)
-		add_child(popup)
-		popup.move_to_center()
+		Interface.instance.error_popup.show_popup()
 
 
 func _on_available_engines_item_main_button_pressed(item: EngineView) -> void:
@@ -48,5 +39,7 @@ func _on_available_engines_item_inner_button_pressed(item: EngineView) -> void:
 	)
 
 
-func _on_download_model_install_completed(_success: bool) -> void:
+func _on_download_model_install_completed(success: bool) -> void:
 	Interface.instance.progress_popup.hide_popup()
+	if not success:
+		Interface.instance.error_popup.show_popup()

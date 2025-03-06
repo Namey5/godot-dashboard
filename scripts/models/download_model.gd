@@ -4,7 +4,9 @@ extends Node
 signal page_fetched(success: bool, new_releases: Array)
 signal install_completed(success: bool)
 
-const BASE_URL := "https://api.github.com/repos/godotengine/godot/releases?per_page={page_size}&page={page_id}"
+const RELEASE_LIST_URL := "https://api.github.com/repos/godotengine/godot/releases?per_page={page_size}&page={page_id}"
+const TEMP_DIR := "user://temp"
+const INSTALL_DIR := "user://engines"
 const PLATFORM_ID_FORMAT := "{os}.{arch}"
 const PLATFORM_ASSET_REGEXES := {
 	# I'm on Linux.x86_64, so implement others as needed.
@@ -46,24 +48,19 @@ func fetch_next_page() -> void:
 	if list_request_in_progress:
 		return
 
+	var url := RELEASE_LIST_URL.format({ "page_size": results_per_page, "page_id": _current_page })
+
 	_list_request = HTTPRequest.new()
 	_list_request.request_completed.connect(_on_next_page_fetched)
 	add_child(_list_request)
-
-	var url := BASE_URL.format({ "page_size": results_per_page, "page_id": _current_page })
+	
 	print("Sending request: ", url)
-
 	var result := _list_request.request(url)
 	if result == OK:
 		await _list_request.request_completed
 	else:
 		push_error("Failed to send request: ", result)
-		_on_next_page_fetched(
-			HTTPRequest.RESULT_REQUEST_FAILED,
-			403,
-			PackedStringArray(),
-			PackedByteArray()
-		)
+		page_fetched.emit(false, null)
 
 	_list_request.queue_free()
 
@@ -96,30 +93,40 @@ func install_release(release: Variant) -> void:
 	if install_request_in_progress:
 		return
 
-	_install_request = HTTPRequest.new()
-	_install_request.request_completed.connect(_on_release_downloaded)
-	_install_request.download_file = "user://tmp.zip"
-	add_child(_install_request)
+	var err: Error
 
 	var desired_asset: Variant
 	for asset in release.assets:
 		if platform_asset_regex.search(asset.name) != null:
 			desired_asset = asset
 
-	var url := desired_asset.browser_download_url as String
-	print("Sending request: ", url)
+	if desired_asset == null:
+		push_error("Failed to find supported asset.")
+		install_completed.emit(false)
+		return
 
+	var url := desired_asset.browser_download_url as String
+	
+	err = DirAccess.make_dir_recursive_absolute(TEMP_DIR)
+	assert(err == OK)
+	var file_name := url.substr(url.rfind("/") + 1)
+	if not file_name.ends_with(".zip"):
+		push_error("Failed to find supported asset.")
+		install_completed.emit(false)
+		return
+
+	_install_request = HTTPRequest.new()
+	_install_request.request_completed.connect(_on_release_downloaded)
+	_install_request.download_file = "%s/%s" % [TEMP_DIR, file_name]
+	add_child(_install_request)
+	
+	print("Sending request: ", url)
 	var result := _install_request.request(url)
 	if result == OK:
 		await _install_request.request_completed
 	else:
 		push_error("Failed to send request: ", result)
-		_on_release_downloaded(
-			HTTPRequest.RESULT_REQUEST_FAILED,
-			403,
-			PackedStringArray(),
-			PackedByteArray()
-		)
+		install_completed.emit(false)
 
 	_install_request.queue_free()
 
@@ -135,24 +142,46 @@ func _on_release_downloaded(
 		install_completed.emit(false)
 		return
 
-	DirAccess.make_dir_recursive_absolute("user://engines")
+	var err: Error
+	
+	var dir_name := _install_request.download_file \
+		.substr(_install_request.download_file.rfind("/") + 1) \
+		.rstrip(".zip")
+	assert(not dir_name.is_empty())
+	var install_dir := "%s/%s" % [INSTALL_DIR, dir_name]
+	err = DirAccess.make_dir_recursive_absolute(install_dir)
+	assert(err == OK)
 
+	var zip_path := _install_request.download_file
 	var zip_reader := ZIPReader.new()
-	zip_reader.open("user://tmp.zip");
+	err = zip_reader.open(zip_path)
+	if err != OK:
+		push_error("Failed to open zip '", zip_path, "': ", err)
+		install_completed.emit(false)
+		return
+
 	var files := zip_reader.get_files()
 	for file in files:
-		var bytes := zip_reader.read_file(file)
-		var path := "user://engines/%s" % file
+		var path := "%s/%s" % [install_dir, file]
 		var output := FileAccess.open(path, FileAccess.WRITE)
-		if output != null:
-			output.store_buffer(bytes)
-			output.close()
-			FileAccess.set_unix_permissions(path, FileAccess.UNIX_READ_OWNER | FileAccess.UNIX_WRITE_OWNER | FileAccess.UNIX_EXECUTE_OWNER)
-		else:
-			print("Failed to write file '", path, "': ", FileAccess.get_open_error())
+		if output == null:
+			push_error("Failed to write file '", path, "': ", FileAccess.get_open_error())
+			install_completed.emit(false)
+			return
+
+		var bytes := zip_reader.read_file(file)
+		output.store_buffer(bytes)
+		output.close()
+		FileAccess.set_unix_permissions(
+			path,
+			FileAccess.UNIX_READ_OWNER
+				| FileAccess.UNIX_WRITE_OWNER
+				| FileAccess.UNIX_EXECUTE_OWNER
+		)
+
 	zip_reader.close()
 
-	DirAccess.remove_absolute("user://tmp.zip");
+	DirAccess.remove_absolute(zip_path);
 
 	print("Successfully installed release.")
 	install_completed.emit(true)

@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjrednjg8v7ps"]
+
+[ext_resource type="Script" path="res://scripts/views/error_popup.gd" id="1_ctpkt"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_e5bdc"]
+font_size = 20
+
+[node name="ErrorPopup" type="PanelContainer" node_paths=PackedStringArray("title", "message", "button")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ctpkt")
+title = NodePath("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Title")
+message = NodePath("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Message")
+button = NodePath("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Button")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_type_variation = &"PanelPopup"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "ERROR"
+label_settings = SubResource("LabelSettings_e5bdc")
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "An error occurred."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "OK"
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Button" to="." method="hide_popup"]
