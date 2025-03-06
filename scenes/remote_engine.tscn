@@ -6,8 +6,12 @@
 
 [node name="RemoteEngine" instance=ExtResource("1_v0rh8")]
 
+[node name="MainButton" parent="." index="0"]
+tooltip_text = "Open the Github page for this release."
+
 [node name="Icon" parent="MarginContainer/HBoxContainer" index="0"]
 texture = ExtResource("4_dcskd")
 
 [node name="InnerButton" parent="MarginContainer/HBoxContainer" index="2"]
+tooltip_text = "Install this version of Godot."
 icon = ExtResource("3_el4gi")
