@@ -127,7 +127,7 @@ func install_release(release: Variant) -> void:
 		return
 
 	_install_request = HTTPRequest.new()
-	_install_request.request_completed.connect(_on_release_downloaded)
+	_install_request.request_completed.connect(_on_release_downloaded.bind(release))
 	_install_request.download_file = "%s/%s" % [Config.temp_dir, file_name]
 	add_child(_install_request)
 	
@@ -146,7 +146,8 @@ func _on_release_downloaded(
 	result: int,
 	response_code: int,
 	_headers: PackedStringArray,
-	_body: PackedByteArray
+	_body: PackedByteArray,
+	release: Variant
 ) -> void:
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("Request failed [result: ", result, ", code: ", response_code, "]")
@@ -155,10 +156,7 @@ func _on_release_downloaded(
 
 	var err: Error
 	
-	var dir_name := _install_request.download_file \
-		.substr(_install_request.download_file.rfind("/") + 1) \
-		.trim_suffix(".zip")
-	assert(not dir_name.is_empty())
+	var dir_name := "Godot_%s" % release.tag_name
 	var install_dir := "%s/%s" % [Config.install_dir, dir_name]
 	err = DirAccess.make_dir_recursive_absolute(install_dir)
 	assert(err == OK)

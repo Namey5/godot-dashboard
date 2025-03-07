@@ -4,6 +4,7 @@ extends Node
 
 @export var model: DownloadModel
 @export var view: EngineListView
+@export var install_controller: InstallController
 
 
 func _ready() -> void:
@@ -41,5 +42,7 @@ func _on_available_engines_item_inner_button_pressed(item: EngineView) -> void:
 
 func _on_download_model_install_completed(success: bool) -> void:
 	Interface.instance.progress_popup.hide_popup()
-	if not success:
+	if success:
+		install_controller.refresh()
+	else:
 		Interface.instance.error_popup.show_popup()

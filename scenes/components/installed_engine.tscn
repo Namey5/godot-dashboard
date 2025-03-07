@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://clbh52vi6j86f"]
+
+[ext_resource type="PackedScene" uid="uid://bq08c3veblvgs" path="res://scenes/components/engine.tscn" id="1_870ht"]
+[ext_resource type="Script" path="res://scripts/views/installed_engine_view.gd" id="2_o3l6n"]
+
+[node name="InstalledEngine" instance=ExtResource("1_870ht")]
+script = ExtResource("2_o3l6n")
+
+[node name="MainButton" parent="." index="0"]
+tooltip_text = "Launch this version of Godot."
+
+[node name="InnerButton" parent="MarginContainer/HBoxContainer" index="2"]
+tooltip_text = "Uninstall this version of Godot."

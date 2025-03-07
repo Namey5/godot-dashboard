@@ -1,12 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://5461o8s23g0a"]
+[gd_scene load_steps=11 format=3 uid="uid://5461o8s23g0a"]
 
 [ext_resource type="PackedScene" uid="uid://c8ipld8xjki0s" path="res://scenes/components/engine_list.tscn" id="1_dnn2p"]
 [ext_resource type="Script" path="res://scripts/views/engines_tab.gd" id="1_ftrdj"]
 [ext_resource type="Script" path="res://scripts/controllers/download_controller.gd" id="2_76avd"]
 [ext_resource type="Script" path="res://scripts/models/download_model.gd" id="2_634fe"]
+[ext_resource type="Script" path="res://scripts/controllers/install_controller.gd" id="3_ntuo6"]
 [ext_resource type="Texture2D" uid="uid://bross8jg3m6pd" path="res://icons/PNG/White/1x/home.png" id="4_8ugra"]
 [ext_resource type="PackedScene" uid="uid://cfhx1hacfgmcs" path="res://scenes/components/remote_engine.tscn" id="4_aweqb"]
+[ext_resource type="Script" path="res://scripts/models/install_model.gd" id="4_tw1y5"]
 [ext_resource type="Texture2D" uid="uid://yqmsb0anuqse" path="res://icons/PNG/White/1x/share2.png" id="5_rig64"]
+[ext_resource type="PackedScene" uid="uid://clbh52vi6j86f" path="res://scenes/components/installed_engine.tscn" id="7_jvyek"]
 
 [node name="Engines" type="ScrollContainer"]
 anchors_preset = 15
@@ -19,10 +22,19 @@ script = ExtResource("1_ftrdj")
 icon = ExtResource("4_8ugra")
 metadata/_tab_index = 0
 
-[node name="DownloadController" type="Node" parent="." node_paths=PackedStringArray("model", "view")]
+[node name="InstallController" type="Node" parent="." node_paths=PackedStringArray("model", "view")]
+script = ExtResource("3_ntuo6")
+model = NodePath("InstallModel")
+view = NodePath("../MarginContainer/VBoxContainer/InstalledEngines")
+
+[node name="InstallModel" type="Node" parent="InstallController"]
+script = ExtResource("4_tw1y5")
+
+[node name="DownloadController" type="Node" parent="." node_paths=PackedStringArray("model", "view", "install_controller")]
 script = ExtResource("2_76avd")
 model = NodePath("DownloadModel")
 view = NodePath("../MarginContainer/VBoxContainer/AvailableEngines")
+install_controller = NodePath("../InstallController")
 
 [node name="DownloadModel" type="Node" parent="DownloadController"]
 script = ExtResource("2_634fe")
@@ -36,6 +48,7 @@ layout_mode = 2
 
 [node name="InstalledEngines" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_dnn2p")]
 layout_mode = 2
+engine_scene = ExtResource("7_jvyek")
 header_format = "Installed [{0}]"
 
 [node name="Header" parent="MarginContainer/VBoxContainer/InstalledEngines/MarginContainer/VBoxContainer" index="0"]
@@ -67,6 +80,9 @@ text = "No engines found."
 
 [connection signal="install_completed" from="DownloadController/DownloadModel" to="DownloadController" method="_on_download_model_install_completed"]
 [connection signal="page_fetched" from="DownloadController/DownloadModel" to="DownloadController" method="_on_download_model_page_fetched"]
+[connection signal="item_inner_button_pressed" from="MarginContainer/VBoxContainer/InstalledEngines" to="InstallController" method="_on_installed_engines_item_inner_button_pressed"]
+[connection signal="item_main_button_pressed" from="MarginContainer/VBoxContainer/InstalledEngines" to="InstallController" method="_on_installed_engines_item_main_button_pressed"]
+[connection signal="visibility_changed" from="MarginContainer/VBoxContainer/InstalledEngines" to="InstallController" method="refresh"]
 [connection signal="item_inner_button_pressed" from="MarginContainer/VBoxContainer/AvailableEngines" to="DownloadController" method="_on_available_engines_item_inner_button_pressed"]
 [connection signal="item_main_button_pressed" from="MarginContainer/VBoxContainer/AvailableEngines" to="DownloadController" method="_on_available_engines_item_main_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/AvailableEngines/MarginContainer/VBoxContainer/Content/VBoxContainer/NextPageButton" to="DownloadController" method="_on_next_page_button_pressed"]
