@@ -21,7 +21,7 @@ func _on_download_model_page_fetched(success: bool, new_releases: Array) -> void
 	if success:
 		view.add_items(new_releases)
 	else:
-		Interface.instance.error_popup.show_popup()
+		Interface.instance.show_error()
 
 
 func _on_available_engines_item_main_button_pressed(item: EngineView) -> void:
@@ -45,4 +45,4 @@ func _on_download_model_install_completed(success: bool) -> void:
 	if success:
 		install_controller.refresh()
 	else:
-		Interface.instance.error_popup.show_popup()
+		Interface.instance.show_error()

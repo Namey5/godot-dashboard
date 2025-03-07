@@ -46,4 +46,4 @@ func save() -> void:
 	var err := Config.save_config()
 	if err != OK:
 		push_error("Failed to save config: ", err)
-		Interface.instance.error_popup.show_popup()
+		Interface.instance.show_error()

@@ -1,12 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://pe5t2mgi7s7i"]
+[gd_scene load_steps=5 format=3 uid="uid://pe5t2mgi7s7i"]
 
 [ext_resource type="Script" path="res://scripts/interface.gd" id="1_4m040"]
 [ext_resource type="PackedScene" uid="uid://5461o8s23g0a" path="res://scenes/screens/engines_tab.tscn" id="2_hghni"]
 [ext_resource type="PackedScene" uid="uid://cm04goq40sjp7" path="res://scenes/screens/settings_tab.tscn" id="3_l7dic"]
 [ext_resource type="PackedScene" uid="uid://dd8r6kxm6xjfq" path="res://scenes/components/progress_popup.tscn" id="4_kk3lw"]
-[ext_resource type="PackedScene" uid="uid://bjrednjg8v7ps" path="res://scenes/components/error_popup.tscn" id="5_viql5"]
 
-[node name="Interface" type="Control" node_paths=PackedStringArray("progress_popup", "error_popup")]
+[node name="Interface" type="Control" node_paths=PackedStringArray("progress_popup", "accept_dialog", "confirm_dialog")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +14,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4m040")
 progress_popup = NodePath("ProgressPopup")
-error_popup = NodePath("ErrorPopup")
+accept_dialog = NodePath("AcceptDialog")
+confirm_dialog = NodePath("ConfirmationDialog")
 
 [node name="MainPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -48,6 +48,22 @@ layout_mode = 2
 visible = false
 layout_mode = 1
 
-[node name="ErrorPopup" parent="." instance=ExtResource("5_viql5")]
-visible = false
-layout_mode = 1
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+disable_3d = true
+initial_position = 2
+size = Vector2i(400, 200)
+unresizable = true
+force_native = true
+min_size = Vector2i(400, 200)
+max_size = Vector2i(1280, 720)
+dialog_autowrap = true
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+disable_3d = true
+initial_position = 2
+size = Vector2i(400, 200)
+unresizable = true
+force_native = true
+min_size = Vector2i(400, 200)
+max_size = Vector2i(1280, 720)
+dialog_autowrap = true
