@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://5461o8s23g0a"]
+[gd_scene load_steps=8 format=3 uid="uid://5461o8s23g0a"]
 
-[ext_resource type="PackedScene" uid="uid://c8ipld8xjki0s" path="res://scenes/engine_list.tscn" id="1_dnn2p"]
+[ext_resource type="PackedScene" uid="uid://c8ipld8xjki0s" path="res://scenes/components/engine_list.tscn" id="1_dnn2p"]
+[ext_resource type="Script" path="res://scripts/views/engines_tab.gd" id="1_ftrdj"]
 [ext_resource type="Script" path="res://scripts/controllers/download_controller.gd" id="2_76avd"]
 [ext_resource type="Script" path="res://scripts/models/download_model.gd" id="2_634fe"]
 [ext_resource type="Texture2D" uid="uid://bross8jg3m6pd" path="res://icons/PNG/White/1x/home.png" id="4_8ugra"]
-[ext_resource type="PackedScene" uid="uid://cfhx1hacfgmcs" path="res://scenes/remote_engine.tscn" id="4_aweqb"]
+[ext_resource type="PackedScene" uid="uid://cfhx1hacfgmcs" path="res://scenes/components/remote_engine.tscn" id="4_aweqb"]
 [ext_resource type="Texture2D" uid="uid://yqmsb0anuqse" path="res://icons/PNG/White/1x/share2.png" id="5_rig64"]
 
 [node name="Engines" type="ScrollContainer"]
@@ -14,6 +15,8 @@ anchor_bottom = 1.0
 offset_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ftrdj")
+icon = ExtResource("4_8ugra")
 metadata/_tab_index = 0
 
 [node name="DownloadController" type="Node" parent="." node_paths=PackedStringArray("model", "view")]

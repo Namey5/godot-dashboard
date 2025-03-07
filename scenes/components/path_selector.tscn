@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://8p78682lntjv"]
+
+[ext_resource type="Script" path="res://scripts/components/path_selector.gd" id="1_luud3"]
+[ext_resource type="Texture2D" uid="uid://dnnaxanmbahvo" path="res://icons/PNG/White/1x/menuList.png" id="2_bpckc"]
+[ext_resource type="Texture2D" uid="uid://2eyrehlue6s2" path="res://icons/PNG/White/1x/open.png" id="3_bt2uy"]
+
+[node name="PathSelector" type="HBoxContainer" node_paths=PackedStringArray("text_field", "browse_button", "open_button")]
+size_flags_horizontal = 3
+script = ExtResource("1_luud3")
+text_field = NodePath("LineEdit")
+browse_button = NodePath("BrowseButton")
+open_button = NodePath("OpenButton")
+
+[node name="LineEdit" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+clear_button_enabled = true
+
+[node name="BrowseButton" type="Button" parent="."]
+layout_mode = 2
+tooltip_text = "Browse..."
+mouse_default_cursor_shape = 2
+theme_override_constants/icon_max_width = 32
+icon = ExtResource("2_bpckc")
+icon_alignment = 1
+
+[node name="OpenButton" type="Button" parent="."]
+layout_mode = 2
+tooltip_text = "Open in File Manager."
+mouse_default_cursor_shape = 2
+theme_override_constants/icon_max_width = 32
+icon = ExtResource("3_bt2uy")
+
+[connection signal="text_submitted" from="LineEdit" to="." method="validate_path" unbinds=1]
+[connection signal="pressed" from="BrowseButton" to="." method="browse_for_path"]
+[connection signal="pressed" from="OpenButton" to="." method="open_in_file_manager"]

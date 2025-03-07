@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://pe5t2mgi7s7i"]
+
+[ext_resource type="Script" path="res://scripts/interface.gd" id="1_4m040"]
+[ext_resource type="PackedScene" uid="uid://5461o8s23g0a" path="res://scenes/screens/engines_tab.tscn" id="2_hghni"]
+[ext_resource type="PackedScene" uid="uid://cm04goq40sjp7" path="res://scenes/screens/settings_tab.tscn" id="3_l7dic"]
+[ext_resource type="PackedScene" uid="uid://dd8r6kxm6xjfq" path="res://scenes/components/progress_popup.tscn" id="4_kk3lw"]
+[ext_resource type="PackedScene" uid="uid://bjrednjg8v7ps" path="res://scenes/components/error_popup.tscn" id="5_viql5"]
+
+[node name="Interface" type="Control" node_paths=PackedStringArray("progress_popup", "error_popup")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4m040")
+progress_popup = NodePath("ProgressPopup")
+error_popup = NodePath("ErrorPopup")
+
+[node name="MainPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabContainer" type="TabContainer" parent="MainPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_alignment = 1
+current_tab = 0
+use_hidden_tabs_for_min_size = true
+
+[node name="Engines" parent="MainPanel/TabContainer" instance=ExtResource("2_hghni")]
+layout_mode = 2
+vertical_scroll_mode = 2
+
+[node name="Settings" parent="MainPanel/TabContainer" instance=ExtResource("3_l7dic")]
+visible = false
+layout_mode = 2
+
+[node name="ProgressPopup" parent="." instance=ExtResource("4_kk3lw")]
+visible = false
+layout_mode = 1
+
+[node name="ErrorPopup" parent="." instance=ExtResource("5_viql5")]
+visible = false
+layout_mode = 1

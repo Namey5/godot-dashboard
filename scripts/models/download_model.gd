@@ -5,8 +5,6 @@ signal page_fetched(success: bool, new_releases: Array)
 signal install_completed(success: bool)
 
 const RELEASE_LIST_URL := "https://api.github.com/repos/godotengine/godot/releases?per_page={page_size}&page={page_id}"
-const TEMP_DIR := "user://temp"
-const INSTALL_DIR := "user://engines"
 const PLATFORM_ID_FORMAT := "{os}.{arch}"
 const PLATFORM_ASSET_REGEXES := {
 	# I'm on Linux.x86_64, so implement others as needed.
@@ -77,11 +75,23 @@ func _on_next_page_fetched(
 		return
 
 	var body_json := body.get_string_from_utf8()
-	var releases: Variant = JSON.parse_string(body_json)
-	if releases == null or releases is not Array:
+	var releases := JSON.parse_string(body_json) as Array
+	if releases == null:
 		push_error("Failed to parse json: ", body_json)
 		page_fetched.emit(false, null)
 		return
+
+	for i in range(releases.size(), 0):
+		var release: Variant = releases[i]
+		
+		var has_required_asset := false
+		for asset in release.assets:
+			if platform_asset_regex.search(asset.name) != null:
+				has_required_asset = true
+				break
+
+		if not has_required_asset:
+			releases.remove_at(i)
 
 	print("Successfully fetched ", releases.size(), " releases.")
 	_release_list.append_array(releases)
@@ -95,10 +105,11 @@ func install_release(release: Variant) -> void:
 
 	var err: Error
 
-	var desired_asset: Variant
+	var desired_asset: Variant = null
 	for asset in release.assets:
 		if platform_asset_regex.search(asset.name) != null:
 			desired_asset = asset
+			break
 
 	if desired_asset == null:
 		push_error("Failed to find supported asset.")
@@ -107,7 +118,7 @@ func install_release(release: Variant) -> void:
 
 	var url := desired_asset.browser_download_url as String
 	
-	err = DirAccess.make_dir_recursive_absolute(TEMP_DIR)
+	err = DirAccess.make_dir_recursive_absolute(Config.temp_dir)
 	assert(err == OK)
 	var file_name := url.substr(url.rfind("/") + 1)
 	if not file_name.ends_with(".zip"):
@@ -117,7 +128,7 @@ func install_release(release: Variant) -> void:
 
 	_install_request = HTTPRequest.new()
 	_install_request.request_completed.connect(_on_release_downloaded)
-	_install_request.download_file = "%s/%s" % [TEMP_DIR, file_name]
+	_install_request.download_file = "%s/%s" % [Config.temp_dir, file_name]
 	add_child(_install_request)
 	
 	print("Sending request: ", url)
@@ -146,9 +157,9 @@ func _on_release_downloaded(
 	
 	var dir_name := _install_request.download_file \
 		.substr(_install_request.download_file.rfind("/") + 1) \
-		.rstrip(".zip")
+		.trim_suffix(".zip")
 	assert(not dir_name.is_empty())
-	var install_dir := "%s/%s" % [INSTALL_DIR, dir_name]
+	var install_dir := "%s/%s" % [Config.install_dir, dir_name]
 	err = DirAccess.make_dir_recursive_absolute(install_dir)
 	assert(err == OK)
 

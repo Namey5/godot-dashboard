@@ -1,0 +1,102 @@
+[gd_scene load_steps=7 format=3 uid="uid://cm04goq40sjp7"]
+
+[ext_resource type="Script" path="res://scripts/views/settings_tab.gd" id="1_618is"]
+[ext_resource type="Texture2D" uid="uid://b1kd74nlcm2wt" path="res://icons/PNG/White/1x/return.png" id="2_3tpay"]
+[ext_resource type="Texture2D" uid="uid://3wkxp10fkob" path="res://icons/PNG/White/1x/gear.png" id="2_i1hb7"]
+[ext_resource type="Texture2D" uid="uid://dqcwnvnysa1fi" path="res://icons/PNG/White/1x/save.png" id="3_4kqf3"]
+[ext_resource type="PackedScene" uid="uid://8p78682lntjv" path="res://scenes/components/path_selector.tscn" id="3_cwt4j"]
+[ext_resource type="Texture2D" uid="uid://68nc6pkj0imw" path="res://icons/PNG/White/1x/trashcanOpen.png" id="4_xxbks"]
+
+[node name="Settings" type="ScrollContainer" node_paths=PackedStringArray("install_path", "temp_path", "reset_button", "save_button")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_618is")
+icon = ExtResource("2_i1hb7")
+install_path = NodePath("MarginContainer/VBoxContainer/SettingsList/InstallPathSelector")
+temp_path = NodePath("MarginContainer/VBoxContainer/SettingsList/TempPathSelector")
+reset_button = NodePath("MarginContainer/VBoxContainer/Buttons/ResetButton")
+save_button = NodePath("MarginContainer/VBoxContainer/Buttons/SaveButton")
+metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SettingsList" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+
+[node name="InstallPathLabel" type="Label" parent="MarginContainer/VBoxContainer/SettingsList"]
+layout_mode = 2
+tooltip_text = "The location in which engine versions will be installed.
+NOTE: changing this will not move any already installed engine versions."
+mouse_filter = 0
+text = "Install Path:"
+
+[node name="InstallPathSelector" parent="MarginContainer/VBoxContainer/SettingsList" node_paths=PackedStringArray("file_dialog") instance=ExtResource("3_cwt4j")]
+layout_mode = 2
+file_dialog = NodePath("../../../../FileDialog")
+
+[node name="TempPathLabel" type="Label" parent="MarginContainer/VBoxContainer/SettingsList"]
+layout_mode = 2
+tooltip_text = "The location in which temporary files will be placed. 
+These may not always be cleaned up, so it probably makes more 
+sense to put them in a system-wide temp directory."
+mouse_filter = 0
+text = "Temporary Path:"
+
+[node name="TempPathSelector" parent="MarginContainer/VBoxContainer/SettingsList" node_paths=PackedStringArray("file_dialog") instance=ExtResource("3_cwt4j")]
+layout_mode = 2
+file_dialog = NodePath("../../../../FileDialog")
+
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="DefaultsButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_constants/icon_max_width = 32
+text = "Defaults"
+icon = ExtResource("4_xxbks")
+
+[node name="ResetButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_constants/icon_max_width = 32
+text = "Reset"
+icon = ExtResource("2_3tpay")
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_constants/icon_max_width = 32
+text = "Save"
+icon = ExtResource("3_4kqf3")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+disable_3d = true
+title = "Open a Directory"
+initial_position = 2
+size = Vector2i(622, 400)
+ok_button_text = "Select Current Folder"
+dialog_hide_on_ok = true
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/DefaultsButton" to="." method="restore_defaults"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/ResetButton" to="." method="reset"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/SaveButton" to="." method="save"]

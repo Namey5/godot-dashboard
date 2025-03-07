@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjrednjg8v7ps"]
 
-[ext_resource type="Script" path="res://scripts/views/error_popup.gd" id="1_ctpkt"]
+[ext_resource type="Script" path="res://scripts/components/error_popup.gd" id="1_ctpkt"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_e5bdc"]
 font_size = 20

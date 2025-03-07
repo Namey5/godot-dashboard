@@ -11,11 +11,15 @@ config_version=5
 [application]
 
 config/name="godot-dashboard"
-run/main_scene="res://interface.tscn"
+run/main_scene="res://scenes/interface.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 run/low_processor_mode=true
 boot_splash/show_image=false
 config/icon="res://icon.svg"
+
+[autoload]
+
+Config="*res://scripts/config.gd"
 
 [display]
 
